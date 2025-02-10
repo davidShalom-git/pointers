@@ -6,8 +6,8 @@ const { IPLS, ESPORTS, GoogleS,StoryS } = require('../Non_Tech_models/Non_Tech')
 require('dotenv').config();
 
 const razorpay = new Razorpay({
-  key_id: "rzp_test_wRMetr8JdWmUxd",
-  key_secret: "j9n9fV23OKQYDbrJkOu8ZGkY"
+  key_id: "rzp_live_LODynINQB1J1t5",
+  key_secret: "EGxyQP6w3T0cv4p8d6II7Yzy"
 });
 
 // Route to add a new IPL document and create Razorpay order
@@ -152,7 +152,7 @@ router.post('/verify-payment', async (req, res) => {
 
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
-      .createHmac('sha256', "j9n9fV23OKQYDbrJkOu8ZGkY")
+      .createHmac('sha256', "EGxyQP6w3T0cv4p8d6II7Yzy")
       .update(body.toString())
       .digest('hex');
 

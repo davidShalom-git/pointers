@@ -34,7 +34,7 @@ const Quiz = () => {
   const handlePayment = async () => {
     try {
       const options = {
-        key: "rzp_test_wRMetr8JdWmUxd",
+        key: "rzp_live_LODynINQB1J1t5",
         amount: 1000, // Amount in paise (₹500)
         currency: "INR",
         name: "Event Registration",
