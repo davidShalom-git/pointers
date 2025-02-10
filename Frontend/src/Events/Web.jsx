@@ -22,7 +22,7 @@ const Web = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:2000/api/cse/web", formData);
+      const response = await axios.post("https://pointers.onrender.com/api/cse/web", formData);
       console.log("Registration Successful:", response.data);
       setIsRegistered(true); // Hide button and show success message
     } catch (error) {

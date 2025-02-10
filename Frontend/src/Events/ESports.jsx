@@ -23,7 +23,7 @@ const Esports = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:2000/api/cse/esports", formData);
+      const response = await axios.post("https://pointers.onrender.com/api/cse/esports", formData);
       console.log("Registration Successful:", response.data);
       setIsRegistered(true); // Hide button and show success message
     } catch (error) {

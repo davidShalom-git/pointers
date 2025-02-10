@@ -21,7 +21,7 @@ const PPT = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:2000/api/cse/ppt", formData);
+      const response = await axios.post("https://pointers.onrender.com/api/cse/ppt", formData);
       console.log("Registration Successful:", response.data);
       setIsRegistered(true);
     } catch (error) {
