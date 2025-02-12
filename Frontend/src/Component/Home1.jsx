@@ -77,7 +77,7 @@ const Home1 = () => {
            <ul className="flex flex-col items-center space-y-4 text-lg">
              <li><Link to="/home" className="hover:text-gray-400" onClick={closeMenu}>Home</Link></li>
              <li><Link to="/technical" className="hover:text-gray-400" onClick={closeMenu}>Events</Link></li>
-             <li><Link to="/video" className="hover:text-gray-400" onClick={closeMenu}>Video</Link></li>
+             <li><Link to="/card" className="hover:text-gray-400" onClick={closeMenu}>Guest</Link></li>
              <li><Link to="/about" className="hover:text-gray-400" onClick={closeMenu}>About</Link></li>
            </ul>
          </div>

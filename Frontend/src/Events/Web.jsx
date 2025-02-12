@@ -8,29 +8,26 @@ const Code = () => {
   const [formData, setFormData] = useState({
     Name: "",
     Email: "",
-    Phone_No: "", 
+    Phone_No: "",
     College: ""
   });
 
-  const [isRegistered, setIsRegistered] = useState(false); 
+  const [isRegistered, setIsRegistered] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
 
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); 
+    setErrorMessage("");
 
     try {
       const response = await axios.post("https://pointers.onrender.com/api/cse/web", formData);
       console.log("Registration Successful:", response.data);
-
-      setIsRegistered(true); 
-      setFormData({ Name: "", Email: "", Phone_No: "", College: "" }); 
+      setIsRegistered(true);
+      setFormData({ Name: "", Email: "", Phone_No: "", College: "" });
     } catch (error) {
       console.error("Registration Failed:", error);
-      setErrorMessage("Registration failed. Please try again."); 
+      setErrorMessage("Registration failed. Please try again.");
     }
   };
 
@@ -46,7 +43,6 @@ const Code = () => {
             <img src={galaxy} alt="Galaxy Icon" className="h-10 w-10 animate-spin" />
           </div>
 
-          {/* Desktop Menu */}
           <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
             <ul className="flex space-x-6 text-lg">
               <li><Link to="/home" className="hover:text-gray-400">Home</Link></li>
@@ -56,7 +52,6 @@ const Code = () => {
             </ul>
           </div>
 
-          {/* Mobile Menu Button */}
           <button className="md:hidden focus:outline-none" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle Menu">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -64,7 +59,6 @@ const Code = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {isOpen && (
           <div className="absolute top-16 left-0 w-full bg-opacity-90 text-white flex flex-col items-center space-y-4 py-4 md:hidden">
             <Link to="/home" className="hover:text-gray-400" onClick={() => setIsOpen(false)}>Home</Link>
@@ -128,7 +122,7 @@ const Code = () => {
               <div className="mb-4">
                 <label className="block text-gray-300">College</label>
                 <input
-                  type="tel"
+                  type="text"
                   value={formData.College}
                   onChange={(e) => setFormData({ ...formData, College: e.target.value })}
                   className="w-full p-2 border border-gray-300 rounded mt-1 bg-transparent text-white"
@@ -138,38 +132,11 @@ const Code = () => {
 
               {errorMessage && <p className="text-red-400 text-center mb-4">{errorMessage}</p>}
 
-              <button type='submit' className="cursor-pointer relative group overflow-hidden border-2 px-10 py-1 rounded-[12px] border-white lg:ml-28 ml-24 md:ml-32">
-                <span className="font-bold text-black text-xl relative z-10 group-hover:text-white duration-500">Register</span>
-                <span className="absolute top-0 left-0 w-full duration-500 group-hover:-translate-x-full h-full" style={{
-                  background: "rgba(255, 255, 255, 0.1)",
-                  backdropFilter: "blur(15px)",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  boxShadow: "0 4px 6px rgba(255, 255, 255, 0.1)",
-                }}></span>
-                <span className="absolute top-0 left-0 w-full  duration-500 group-hover:translate-x-full h-full" style={{
-                  background: "rgba(255, 255, 255, 0.1)",
-                  backdropFilter: "blur(15px)",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  boxShadow: "0 4px 6px rgba(255, 255, 255, 0.1)",
-                }}></span>
-
-                <span className="absolute top-0 left-0 w-full duration-500 delay-300 group-hover:-translate-y-full h-full" style={{
-                  background: "rgba(255, 255, 255, 0.1)",
-                  backdropFilter: "blur(15px)",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  boxShadow: "0 4px 6px rgba(255, 255, 255, 0.1)",
-                }}></span>
-                <span className="absolute delay-300 top-0 left-0 w-full  duration-500 group-hover:translate-y-full h-full" style={{
-                  background: "rgba(255, 255, 255, 0.1)",
-                  backdropFilter: "blur(15px)",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  boxShadow: "0 4px 6px rgba(255, 255, 255, 0.1)",
-                }}></span>
-              </button>
+              <div className="flex justify-center">
+                <button type="submit" className="relative group border-2 px-10 py-2 rounded-xl border-white text-white font-bold text-lg transition-all hover:bg-white hover:text-black">
+                  Register
+                </button>
+              </div>
             </form>
           )}
         </div>

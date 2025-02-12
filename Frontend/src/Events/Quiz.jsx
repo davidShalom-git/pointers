@@ -149,38 +149,11 @@ const Code = () => {
 
               {errorMessage && <p className="text-red-400 text-center mb-4">{errorMessage}</p>}
 
-              <button type='submit' className="cursor-pointer relative group overflow-hidden border-2 px-10 py-1 rounded-[12px] border-white lg:ml-28 ml-24 md:ml-32">
-                <span className="font-bold text-black text-xl relative z-10 group-hover:text-white duration-500">Register</span>
-                <span className="absolute top-0 left-0 w-full duration-500 group-hover:-translate-x-full h-full" style={{
-                  background: "rgba(255, 255, 255, 0.1)",
-                  backdropFilter: "blur(15px)",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  boxShadow: "0 4px 6px rgba(255, 255, 255, 0.1)",
-                }}></span>
-                <span className="absolute top-0 left-0 w-full  duration-500 group-hover:translate-x-full h-full" style={{
-                  background: "rgba(255, 255, 255, 0.1)",
-                  backdropFilter: "blur(15px)",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  boxShadow: "0 4px 6px rgba(255, 255, 255, 0.1)",
-                }}></span>
-
-                <span className="absolute top-0 left-0 w-full duration-500 delay-300 group-hover:-translate-y-full h-full" style={{
-                  background: "rgba(255, 255, 255, 0.1)",
-                  backdropFilter: "blur(15px)",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  boxShadow: "0 4px 6px rgba(255, 255, 255, 0.1)",
-                }}></span>
-                <span className="absolute delay-300 top-0 left-0 w-full  duration-500 group-hover:translate-y-full h-full" style={{
-                  background: "rgba(255, 255, 255, 0.1)",
-                  backdropFilter: "blur(15px)",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(255, 255, 255, 0.3)",
-                  boxShadow: "0 4px 6px rgba(255, 255, 255, 0.1)",
-                }}></span>
-              </button>
+              <div className="flex justify-center">
+                <button type="submit" className="relative group border-2 px-10 py-2 rounded-xl border-white text-white font-bold text-lg transition-all hover:bg-white hover:text-black">
+                  Register
+                </button>
+              </div>
             </form>
           )}
         </div>
