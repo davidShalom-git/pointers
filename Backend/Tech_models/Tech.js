@@ -14,13 +14,11 @@ const PPT = mongoose.Schema({
         type:String,
         required: true
     },
-    Has_Paid: {
+    College: {
         type:String,
         required: true
     },
-    order_id: {
-        type: String
-    }
+    
 })
 const Web = mongoose.Schema({
     Name: {
@@ -35,13 +33,11 @@ const Web = mongoose.Schema({
         type:String,
         required: true
     },
-    Has_Paid: {
+    College: {
         type:String,
         required: true
     },
-    order_id: {
-        type: String
-    }
+    
 })
 const Coding = mongoose.Schema({
     Name: {
@@ -56,13 +52,11 @@ const Coding = mongoose.Schema({
         type:String,
         required: true
     },
-    Has_Paid: {
+    College: {
         type:String,
         required: true
     },
-    order_id: {
-        type: String
-    }
+    
 })
 const Quiz = mongoose.Schema({
     Name: {
@@ -77,13 +71,11 @@ const Quiz = mongoose.Schema({
         type:String,
         required: true
     },
-    Has_Paid: {
+    College: {
         type:String,
         required: true
     },
-    order_id: {
-        type: String
-    }
+    
 })
 
 const PPTS = mongoose.model('PPT', PPT);
