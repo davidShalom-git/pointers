@@ -34,6 +34,8 @@ const Code = () => {
     }
   };
 
+  
+
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-4 bg-fixed bg-center bg-cover w-full"

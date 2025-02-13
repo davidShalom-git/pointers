@@ -16,7 +16,6 @@ const Code = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,11 +27,15 @@ const Code = () => {
 
       setIsRegistered(true);
       setFormData({ Name: "", Email: "", Phone_No: "", College: "" });
+
     } catch (error) {
       console.error("Registration Failed:", error);
       setErrorMessage("Registration failed. Please try again.");
     }
   };
+
+  // Send email notification
+
 
   return (
     <div
@@ -128,7 +131,7 @@ const Code = () => {
               <div className="mb-4">
                 <label className="block text-gray-300">College</label>
                 <input
-                  type="tel"
+                  type="text"
                   value={formData.College}
                   onChange={(e) => setFormData({ ...formData, College: e.target.value })}
                   className="w-full p-2 border border-gray-300 rounded mt-1 bg-transparent text-white"

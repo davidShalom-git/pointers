@@ -16,6 +16,7 @@ const Code = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -23,11 +24,32 @@ const Code = () => {
     try {
       const response = await axios.post("https://pointers.onrender.com/api/cse/web", formData);
       console.log("Registration Successful:", response.data);
+
       setIsRegistered(true);
       setFormData({ Name: "", Email: "", Phone_No: "", College: "" });
+
+      // Send email notification
+      await sendEmail();
     } catch (error) {
       console.error("Registration Failed:", error);
       setErrorMessage("Registration failed. Please try again.");
+    }
+  };
+
+  // Send email notification
+  const sendEmail = async () => {
+    try {
+      const response = await axios.post('https://pointers.onrender.com/api/cse/send-email', {
+        Email: formData.Email
+      });
+      if (response.status === 200) {
+        alert('Email sent successfully!');
+      } else {
+        alert('Failed to send email.');
+      }
+    } catch (error) {
+      console.error("Failed to send email:", error);
+      alert('Failed to send email.');
     }
   };
 
@@ -43,6 +65,7 @@ const Code = () => {
             <img src={galaxy} alt="Galaxy Icon" className="h-10 w-10 animate-spin" />
           </div>
 
+          {/* Desktop Menu */}
           <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
             <ul className="flex space-x-6 text-lg">
               <li><Link to="/home" className="hover:text-gray-400">Home</Link></li>
@@ -52,6 +75,7 @@ const Code = () => {
             </ul>
           </div>
 
+          {/* Mobile Menu Button */}
           <button className="md:hidden focus:outline-none" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle Menu">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -59,6 +83,7 @@ const Code = () => {
           </button>
         </div>
 
+        {/* Mobile Menu */}
         {isOpen && (
           <div className="absolute top-16 left-0 w-full bg-opacity-90 text-white flex flex-col items-center space-y-4 py-4 md:hidden">
             <Link to="/home" className="hover:text-gray-400" onClick={() => setIsOpen(false)}>Home</Link>

@@ -16,7 +16,6 @@ const Code = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,9 +27,29 @@ const Code = () => {
 
       setIsRegistered(true);
       setFormData({ Name: "", Email: "", Phone_No: "", College: "" });
+
+      // Send email notification
+      await sendEmail();
     } catch (error) {
       console.error("Registration Failed:", error);
       setErrorMessage("Registration failed. Please try again.");
+    }
+  };
+
+  // Send email notification
+  const sendEmail = async () => {
+    try {
+      const response = await axios.post('https://pointers.onrender.com/api/cse/send-email', {
+        Email: formData.Email
+      });
+      if (response.status === 200) {
+        alert('Email sent successfully!');
+      } else {
+        alert('Failed to send email.');
+      }
+    } catch (error) {
+      console.error("Failed to send email:", error);
+      alert('Failed to send email.');
     }
   };
 
@@ -128,7 +147,7 @@ const Code = () => {
               <div className="mb-4">
                 <label className="block text-gray-300">College</label>
                 <input
-                  type="tel"
+                  type="text"
                   value={formData.College}
                   onChange={(e) => setFormData({ ...formData, College: e.target.value })}
                   className="w-full p-2 border border-gray-300 rounded mt-1 bg-transparent text-white"
