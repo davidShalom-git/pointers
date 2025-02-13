@@ -85,7 +85,7 @@ const Home1 = () => {
        
              </nav>
         <div className="bg-fixed bg-center min-h-screen w-full" style={{ backgroundImage: `url(${bk})` }}>
-            <div className="flex flex-col lg:flex-row md:flex-col justify-center items-center text-4xl min-h-screen">
+            <div className="flex flex-col lg:flex-row md:flex-col justify-center items-center text-3xl mt-20 lg:mt-0 min-h-screen">
                 <div className='mx-auto text-center'>
                     <Typewriter
                         key={key}  
