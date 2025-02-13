@@ -3,9 +3,11 @@ import Spline from '@splinetool/react-spline';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import cse from '../assets/cse.png';
-import it from '../assets/it.png';
-import cyber from '../assets/cyber.png';
+import educate from '../assets/educate.png';
+import explore from '../assets/Explore.png';
+import success from '../assets/success.png';
 import Nav from './Nav';
+import '../App.css'
 
 const Home = () => {
   const pointerRef = useRef(null);
@@ -34,30 +36,33 @@ const Home = () => {
             <h1 ref={k25Ref} className="absolute right-10 md:right-20 lg:right-20 top-1/2 transform -translate-y-1/2 text-5xl md:text-8xl lg:text-8xl text-white font-bold opacity-70 hidden lg:block">
               2K25
             </h1>
-            <h1 ref={pointerMobileRef} className="absolute top-12 mt-6 text-5xl md:text-8xl lg:text-8xl text-white font-bold opacity-70 lg:hidden space-y-3">
+            <h1 ref={pointerMobileRef} className="absolute top-12 mt-2 text-5xl md:text-8xl lg:text-8xl text-white font-bold opacity-70 lg:hidden space-y-3">
               POINTER
             </h1>
-            <h1 ref={k25MobileRef} className="absolute top-32  text-5xl md:text-8xl lg:text-8xl text-white font-bold opacity-70 lg:hidden space-y-2">
+            <h1 ref={k25MobileRef} className="absolute top-28 text-5xl md:text-8xl lg:text-8xl text-white font-bold opacity-70 lg:hidden space-y-2">
               2K25
             </h1>
             <Spline scene="https://prod.spline.design/echVvdtq9JHAKrMx/scene.splinecode" />
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-1 grid-cols-1 gap-2 mt-20 mx-auto mb-10">
-          <div className="shadow-xl text-black p-20 flex flex-col items-center justify-center h-[80%] lg:h-[100%] w-[80%] lg:w-[80%] md:w-[50%] mx-auto bg-white shadow-black rounded-full">
-            <img src={cse} className="lg:h-[150px] md:h-[150px] mx-auto" />
-            <p className="mt-5 text-xl"><Link to="/cse" className="text-black">CSE</Link></p>
-          </div>
-          <div className="shadow-xl text-white p-20 flex flex-col items-center justify-center w-[80%] lg:w-[80%] h-[80%] lg:h-[100%] md:w-[50%] mx-auto shadow-white rounded-full">
-            <img src={it} className="lg:h-[150px] md:h-[150px] mx-auto" />
-            <p className="mt-5 text-xl text-white"><Link to="/">IT</Link></p>
-          </div>
-          <div className="shadow-xl text-black p-20 flex flex-col items-center justify-center w-[80%] h-[80%] lg:h-[100%] lg:w-[80%] md:w-[50%] mx-auto shadow-black bg-white rounded-full">
-            <img src={cyber} className="lg:h-[150px] md:h-[150px] mx-auto" />
-            <p className="mt-5 text-xl"><Link to="" className="text-black">AIDS</Link></p>
-          </div>
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 mt-20 mx-auto mb-10 px-6">
+      {[ 
+        { img: explore,  label: "Explore", bg: "bg-white", text: "text-black", shadow: "shadow-black" },
+        { img: educate,  label: "Educate", bg: "bg-gradient-to-r from-black to-black", text: "text-white", shadow: "shadow-white" },
+        { img: success,  label: "Achieve", bg: "bg-white", text: "text-black", shadow: "shadow-black" }
+      ].map((dept, index) => (
+        <div 
+          key={index} 
+          className={`${dept.bg} ${dept.shadow} shadow-xl p-10 flex flex-col items-center justify-center h-[250px] w-[80%] md:w-[60%] lg:w-[80%] mx-auto rounded-3xl transition-transform transform hover:scale-105 animate-bounce mt-10`}
+        >
+          <img src={dept.img} className="h-[120px] mx-auto" alt={dept.label} />
+          <p className={`mt-5 text-xl font-semibold ${dept.text}`}>
+            <Link to={dept.link}>{dept.label}</Link>
+          </p>
         </div>
+      ))}
+    </div>
 
         <div className="flex flex-col mx-auto md:flex-col lg:flex-row lg:space-x-2 mt-20 mb-10 justify-evenly md:border lg:border lg:border-white border border-white md:border-black p-5 md:p-10 lg:p-5 md:mx-auto rounded-xl shadow-lg lg:w-[90%]">
           {/* Image Section */}
@@ -88,7 +93,7 @@ const Home = () => {
             <p className="mt-5 text-xl"><Link to="/technical" className="text-black">Technical</Link></p>
           </div>
           <div className="shadow-xl text-white p-20 flex flex-col items-center justify-center w-[80%] lg:w-[80%] md:w-[50%] mx-auto border border-white rounded-xl">
-            <img src={it} className="lg:h-[150px] md:h-[150px] mx-auto" />
+            <img src={cse} className="lg:h-[150px] md:h-[150px] mx-auto" />
             <p className="mt-5 text-xl text-black"><Link to="/nont" className='text-white'>Non-Technical</Link></p>
           </div>
         </div>
