@@ -3,6 +3,9 @@ const router = express.Router();
 const { IPLS, ESPORTS, GoogleS, StoryS } = require('../Non_Tech_models/Non_Tech');
 const nodemailer = require('nodemailer');
 
+// List of all schemas to check
+const allSchemas = [IPLS, ESPORTS, GoogleS, StoryS];
+
 // Function to send email
 const sendEmail = async (email, subject, text) => {
   try {
@@ -31,6 +34,17 @@ const sendEmail = async (email, subject, text) => {
 // Common function to handle user registration
 const registerUser = async (Model, req, res, subject, text) => {
   try {
+    const { Email } = req.body;
+
+    // Check if user exists in any schema
+    for (let schema of allSchemas) {
+      const existingUser = await schema.findOne({ Email });
+      if (existingUser) {
+        return res.status(400).json({ message: "User already registered in another event." });
+      }
+    }
+
+    // If user is not found, register them
     const newData = new Model({
       Name: req.body.Name,
       Email: req.body.Email,
