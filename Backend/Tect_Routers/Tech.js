@@ -2,19 +2,18 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const { PPTS, WebS, CodingS, QuizS } = require('../Tech_models/Tech');
-require('dotenv').config(); // Import environment variables (if needed)
 
-// Configure the Nodemailer transporter
+// Configure the Nodemailer transporter with hardcoded credentials
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'davidshalomswe@gmail.com',
-    pass: 'qvmc uzfp dwyx rbuu' // Your App Password
+    pass: 'qvmcuzfpdwyxrbuu'  // App password (ensure this is kept secure)
   }
 });
 
 // Function to send an email
-const sendMail = (recipient, subject, message, res) => {
+const sendMail = (recipient, subject, message) => {
   const mailOptions = {
     from: 'davidshalomswe@gmail.com',
     to: recipient,
@@ -22,65 +21,49 @@ const sendMail = (recipient, subject, message, res) => {
     text: message
   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('Error: ', error);
-      return res.status(500).send('Error: ' + error);
-    }
-    console.log('Message sent: ', info.messageId);
-    return res.status(200).send('Message sent: ' + info.messageId);
-  });
+  return transporter.sendMail(mailOptions);
 };
 
-// Route to add a new document without payment integration
+// Function to handle registration with duplicate check
 async function createDocument(req, res, Model, subject, message) {
   try {
-    const newData = new Model({
-      Name: req.body.Name,
-      Email: req.body.Email,
-      Phone_No: req.body.Phone_No,
-      College: req.body.College // Assuming payment is not required
-    });
+    const { Name, Email, Phone_No, College } = req.body;
 
+    // Check if the user has already registered
+    const existingUser = await Model.findOne({ Email });
+
+    if (existingUser) {
+      return res.status(400).json({ message: "You have already registered for this event." });
+    }
+
+    // Save new registration
+    const newData = new Model({ Name, Email, Phone_No, College });
     await newData.save();
 
-    sendMail(req.body.Email, subject, message, res);
+    // Send confirmation email
+    await sendMail(Email, subject, message);
+
+    return res.status(200).json({ message: "Registration successful! A confirmation email has been sent." });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 }
 
-// Routes for creating documents with email notification
+// Event registration routes
 router.post('/ppt', async (req, res) => {
-  const subject = "PPT Registration";
-  const message = `Thank you for registering for the PPT event! We’re thrilled to confirm that your registration has been completed. We truly appreciate your participation and can’t wait to welcome you.
-Please mark your calendar, as the event is fast approaching. We’re excited to meet you and ensure you have a fantastic experience. Feel free to reach out if you have any questions or need further assistance.
-Looking forward to seeing you at POINTER'S 2K25!`;
-  await createDocument(req, res, PPTS, subject, message);
+  await createDocument(req, res, PPTS, "PPT Registration", "Thank you for registering for the PPT event! See you at POINTER'S 2K25!");
 });
 
 router.post('/web', async (req, res) => {
-  const subject = "Web Development Registration";
-  const message = `Thank you for registering for the Web Development event! We’re thrilled to confirm that your registration has been completed. We truly appreciate your participation and can’t wait to welcome you.
-Please mark your calendar, as the event is fast approaching. We’re excited to meet you and ensure you have a fantastic experience. Feel free to reach out if you have any questions or need further assistance.
-Looking forward to seeing you at POINTER'S 2K25!`;
-  await createDocument(req, res, WebS, subject, message);
+  await createDocument(req, res, WebS, "Web Development Registration", "Thank you for registering for the Web Development event! See you at POINTER'S 2K25!");
 });
 
 router.post('/code', async (req, res) => {
-  const subject = "Coding Competition Registration";
-  const message = `Thank you for registering for the Coding Competition! We’re thrilled to confirm that your registration has been completed. We truly appreciate your participation and can’t wait to welcome you.
-Please mark your calendar, as the event is fast approaching. We’re excited to meet you and ensure you have a fantastic experience. Feel free to reach out if you have any questions or need further assistance.
-Looking forward to seeing you at POINTER'S 2K25!`;
-  await createDocument(req, res, CodingS, subject, message);
+  await createDocument(req, res, CodingS, "Coding Competition Registration", "Thank you for registering for the Coding Competition! See you at POINTER'S 2K25!");
 });
 
 router.post('/quiz', async (req, res) => {
-  const subject = "Quiz Competition Registration";
-  const message = `Thank you for registering for the Quiz Competition! We’re thrilled to confirm that your registration has been completed. We truly appreciate your participation and can’t wait to welcome you.
-Please mark your calendar, as the event is fast approaching. We’re excited to meet you and ensure you have a fantastic experience. Feel free to reach out if you have any questions or need further assistance.
-Looking forward to seeing you at POINTER'S 2K25!`;
-  await createDocument(req, res, QuizS, subject, message);
+  await createDocument(req, res, QuizS, "Quiz Competition Registration", "Thank you for registering for the Quiz Competition! See you at POINTER'S 2K25!");
 });
 
 module.exports = router;
