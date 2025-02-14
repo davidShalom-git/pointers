@@ -24,16 +24,25 @@ const sendMail = (recipient, subject, message) => {
   return transporter.sendMail(mailOptions);
 };
 
-// Function to handle registration with duplicate check
+// Function to check if a user exists in any event collection
+async function isUserAlreadyRegistered(email) {
+  const existingUser =
+    (await PPTS.findOne({ Email: email })) ||
+    (await WebS.findOne({ Email: email })) ||
+    (await CodingS.findOne({ Email: email })) ||
+    (await QuizS.findOne({ Email: email }));
+
+  return existingUser;
+}
+
+// Function to handle registration with duplicate check across all events
 async function createDocument(req, res, Model, subject, message) {
   try {
     const { Name, Email, Phone_No, College } = req.body;
 
-    // Check if the user has already registered
-    const existingUser = await Model.findOne({ Email });
-
-    if (existingUser) {
-      return res.status(400).json({ message: "You have already registered for this event." });
+    // Check if the user has already registered for any event
+    if (await isUserAlreadyRegistered(Email)) {
+      return res.status(400).json({ message: "You have already registered for an event. Multiple registrations are not allowed." });
     }
 
     // Save new registration
