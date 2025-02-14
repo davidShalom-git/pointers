@@ -1,88 +1,62 @@
 const express = require('express');
 const router = express.Router();
-const { IPLS, ESPORTS, GoogleS, StoryS } = require('../Non_Tech_models/Non_Tech');
 const nodemailer = require('nodemailer');
+const { IPLS, ESPORTS, GoogleS, StoryS } = require('../Non_Tech_models/Non_Tech');
 
-// List of all schemas to check
-const allSchemas = [IPLS, ESPORTS, GoogleS, StoryS];
+// Combine all non-technical event schemas
+const nonTechSchemas = [IPLS, ESPORTS, GoogleS, StoryS];
 
-// Function to send email
-const sendEmail = async (email, subject, text) => {
-  try {
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: "davidshalomswe@gmail.com",
-        pass: "qvmc uzfp dwyx rbuu" // Your App Password
-      }
-    });
-
-    let mailOptions = {
-      from: "davidshalomswe@gmail.com",
-      to: email,
-      subject: subject,
-      text: text
-    };
-
-    await transporter.sendMail(mailOptions);
-    console.log('Email sent successfully to:', email);
-  } catch (error) {
-    console.error('Error sending email:', error);
+// Configure Nodemailer
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'davidshalomswe@gmail.com',
+    pass: 'qvmcuzfpdwyxrbuu' // App Password (Ensure Security)
   }
+});
+
+// Function to send an email
+const sendMail = (recipient, subject, message) => {
+  const mailOptions = {
+    from: 'davidshalomswe@gmail.com',
+    to: recipient,
+    subject: subject,
+    text: message
+  };
+
+  return transporter.sendMail(mailOptions);
 };
 
-// Common function to handle user registration
-const registerUser = async (Model, req, res, subject, text) => {
+// Function to handle registration
+const registerForEvent = async (Model, req, res, subject, message) => {
   try {
     const { Email } = req.body;
 
-    // Check if user exists in any schema
-    for (let schema of allSchemas) {
+    // Check if the user is already registered in any non-technical event
+    for (let schema of nonTechSchemas) {
       const existingUser = await schema.findOne({ Email });
       if (existingUser) {
-        return res.status(400).json({ message: "User already registered in another event." });
+        return res.status(400).json({ message: "You have already registered for a non-technical event." });
       }
     }
 
-    // If user is not found, register them
-    const newData = new Model({
-      Name: req.body.Name,
-      Email: req.body.Email,
-      Phone_No: req.body.Phone_No,
-      College: req.body.College
-    });
-
-    // Save to database
-    const newPost = await newData.save();
+    // Register the user for this event
+    const newData = new Model(req.body);
+    await newData.save();
 
     // Send confirmation email
-    await sendEmail(req.body.Email, subject, text);
+    await sendMail(Email, subject, message);
 
-    res.status(201).json(newPost);
+    res.status(200).json({ message: "Registration successful! Confirmation email sent." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Routes
-router.post('/ipl', (req, res) => {
-  registerUser(IPLS, req, res, "IPL Registration", 
-    "Thank you for registering for IPL Auction! Your payment and registration are confirmed.");
-});
-
-router.post('/esports', (req, res) => {
-  registerUser(ESPORTS, req, res, "E-Sports Registration", 
-    "Thank you for registering for E-Sports! Your payment and registration are confirmed.");
-});
-
-router.post('/story', (req, res) => {
-  registerUser(StoryS, req, res, "Story Registration", 
-    "Thank you for registering for Story Event! Your payment and registration are confirmed.");
-});
-
-router.post('/google', (req, res) => {
-  registerUser(GoogleS, req, res, "Geo-Hunters Registration", 
-    "Thank you for registering for Geo-Hunters Event! Your payment and registration are confirmed.");
-});
+// Non-technical event routes
+router.post('/ipl', (req, res) => registerForEvent(IPLS, req, res, "IPL Registration", "Thank you for registering for IPL Auction!"));
+router.post('/esports', (req, res) => registerForEvent(ESPORTS, req, res, "E-Sports Registration", "Thank you for registering for E-Sports!"));
+router.post('/story', (req, res) => registerForEvent(StoryS, req, res, "Story Registration", "Thank you for registering for Story Event!"));
+router.post('/google', (req, res) => registerForEvent(GoogleS, req, res, "Geo-Hunters Registration", "Thank you for registering for Geo-Hunters Event!"));
 
 module.exports = router;
