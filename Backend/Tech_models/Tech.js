@@ -1,92 +1,27 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
+// Define a reusable schema template
+const baseSchema = new mongoose.Schema(
+  {
+    Name: { type: String, required: true },
+    Email: { type: String, required: true, unique: true }, // Ensure unique email per event
+    Phone_No: { type: String, required: true },
+    College: { type: String, required: true },
+    Accommodation: { type: String, enum: ["With", "Without"], required: true }, // Uses an enum for valid values
+  },
+  { timestamps: true } // Automatically adds createdAt & updatedAt fields
+);
 
-const PPT = mongoose.Schema({
-    Name: {
-        type:String,
-        required: true
-    },
-    Email: {
-        type:String,
-        required: true
-    },
-    Phone_No: {
-        type:String,
-        required: true
-    },
-    College: {
-        type:String,
-        required: true
-    },
-    
-})
-const Web = mongoose.Schema({
-    Name: {
-        type:String,
-        required: true
-    },
-    Email: {
-        type:String,
-        required: true
-    },
-    Phone_No: {
-        type:String,
-        required: true
-    },
-    College: {
-        type:String,
-        required: true
-    },
-    
-})
-const Coding = mongoose.Schema({
-    Name: {
-        type:String,
-        required: true
-    },
-    Email: {
-        type:String,
-        required: true
-    },
-    Phone_No: {
-        type:String,
-        required: true
-    },
-    College: {
-        type:String,
-        required: true
-    },
-    
-})
-const Quiz = mongoose.Schema({
-    Name: {
-        type:String,
-        required: true
-    },
-    Email: {
-        type:String,
-        required: true
-    },
-    Phone_No: {
-        type:String,
-        required: true
-    },
-    College: {
-        type:String,
-        required: true
-    },
-    
-})
-
-const PPTS = mongoose.model('PPT', PPT);
-const WebS = mongoose.model('Web', Web);
-const CodingS = mongoose.model('Coding', Coding);
-const QuizS = mongoose.model('quiz', Quiz);
+// Create models using the base schema
+const PPTS = mongoose.model("PPT", baseSchema);
+const WebS = mongoose.model("Web", baseSchema);
+const CodingS = mongoose.model("Coding", baseSchema);
+const QuizS = mongoose.model("Quiz", baseSchema);
 
 // Export models
 module.exports = {
-    PPTS,
-    WebS,
-    CodingS,
-    QuizS
+  PPTS,
+  WebS,
+  CodingS,
+  QuizS,
 };
