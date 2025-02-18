@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const { PPTS, WebS, CodingS, QuizS } = require('../Tech_models/Tech');
+// Import credentials from config
 
-// Configure the Nodemailer transporter with hardcoded credentials
+// Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'davidshalomswe@gmail.com',
-    pass: 'qvmcuzfpdwyxrbuu'  // App password (ensure this is kept secure)
+    pass: 'qvmcuzfpdwyxrbuu'
   }
 });
 
@@ -26,53 +27,41 @@ const sendMail = (recipient, subject, message) => {
 
 // Function to check if a user exists in any event collection
 async function isUserAlreadyRegistered(email) {
-  const existingUser =
+  return (
     (await PPTS.findOne({ Email: email })) ||
     (await WebS.findOne({ Email: email })) ||
     (await CodingS.findOne({ Email: email })) ||
-    (await QuizS.findOne({ Email: email }));
-
-  return existingUser;
+    (await QuizS.findOne({ Email: email }))
+  );
 }
 
-// Function to handle registration with duplicate check across all events
+// Function to handle registration with duplicate check
 async function createDocument(req, res, Model, subject, message) {
   try {
-    const { Name, Email, Phone_No, College } = req.body;
+    const { Name, Email, Phone_No, College, With_Accomadation, Without_Accomadation } = req.body;
 
-    // Check if the user has already registered for any event
+    // Check if user already registered
     if (await isUserAlreadyRegistered(Email)) {
-      return res.status(400).json({ message: "You have already registered for an event. Multiple registrations are not allowed." });
+      return res.status(400).json({ message: "You have already registered for an event." });
     }
 
-    // Save new registration
-    const newData = new Model({ Name, Email, Phone_No, College });
+    // Save registration
+    const newData = new Model({ Name, Email, Phone_No, College, With_Accomadation, Without_Accomadation });
     await newData.save();
 
     // Send confirmation email
     await sendMail(Email, subject, message);
 
-    return res.status(200).json({ message: "Registration successful! A confirmation email has been sent." });
+    return res.status(200).json({ message: "Registration successful! Confirmation email sent." });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 }
 
 // Event registration routes
-router.post('/ppt', async (req, res) => {
-  await createDocument(req, res, PPTS, "PPT Registration", "Thank you for registering for the PPT event! See you at POINTER'S 2K25!");
-});
-
-router.post('/web', async (req, res) => {
-  await createDocument(req, res, WebS, "Web Development Registration", "Thank you for registering for the Web Development event! See you at POINTER'S 2K25!");
-});
-
-router.post('/code', async (req, res) => {
-  await createDocument(req, res, CodingS, "Coding Competition Registration", "Thank you for registering for the Coding Competition! See you at POINTER'S 2K25!");
-});
-
-router.post('/quiz', async (req, res) => {
-  await createDocument(req, res, QuizS, "Quiz Competition Registration", "Thank you for registering for the Quiz Competition! See you at POINTER'S 2K25!");
-});
+router.post('/ppt', (req, res) => createDocument(req, res, PPTS, "PPT Registration", "Thank you for registering for the PPT event!"));
+router.post('/web', (req, res) => createDocument(req, res, WebS, "Web Dev Registration", "Thank you for registering for Web Dev!"));
+router.post('/code', (req, res) => createDocument(req, res, CodingS, "Coding Competition", "Thank you for registering for Coding!"));
+router.post('/quiz', (req, res) => createDocument(req, res, QuizS, "Quiz Competition", "Thank you for registering for the Quiz Competition!"));
 
 module.exports = router;
