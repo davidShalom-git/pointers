@@ -6,7 +6,7 @@ const commonSchema = {
     Email: { type: String, required: true },
     Phone_No: { type: String, required: true },
     College: { type: String, required: true },
-    Accommodation: { 
+    Accommodation: {
         type: String, 
         enum: ['With Accommodation', 'Without Accommodation'], 
         required: true 
