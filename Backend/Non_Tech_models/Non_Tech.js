@@ -1,40 +1,29 @@
 const mongoose = require('mongoose');
 
-// Define the schema for IPL
-const IPL = mongoose.Schema({
+// Define a base schema for consistency
+const commonSchema = {
     Name: { type: String, required: true },
     Email: { type: String, required: true },
     Phone_No: { type: String, required: true },
     College: { type: String, required: true },
-    // Add order_id to all schemas for consistency
-});
+    Accommodation: { 
+        type: String, 
+        enum: ['With Accommodation', 'Without Accommodation'], 
+        required: true 
+    }, // Single field for radio button selection
+};
+
+// Define the schema for IPL
+const IPL = new mongoose.Schema(commonSchema);
 
 // Define the schema for E-Sports
-const E_Sports = mongoose.Schema({
-    Name: { type: String, required: true },
-    Email: { type: String, required: true },
-    Phone_No: { type: String, required: true },
-    College: { type: String, required: true },
-    
-});
+const E_Sports = new mongoose.Schema(commonSchema);
 
 // Define the schema for GoogleMap
-const GoogleMap = mongoose.Schema({
-    Name: { type: String, required: true },
-    Email: { type: String, required: true },
-    Phone_No: { type: String, required: true },
-    College: { type: String, required: true },
-    
-});
+const GoogleMap = new mongoose.Schema(commonSchema);
 
 // Define the schema for Story
-const Story = mongoose.Schema({
-    Name: { type: String, required: true },
-    Email: { type: String, required: true },
-    Phone_No: { type: String, required: true },
-    College: { type: String, required: true },
-    
-});
+const Story = new mongoose.Schema(commonSchema);
 
 // Check if models already exist before defining them
 const IPLS = mongoose.models.IPLS || mongoose.model('IPLS', IPL);
