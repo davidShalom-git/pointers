@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const { PPTS, WebS, CodingS, QuizS } = require('../Tech_models/Tech');
-// Import credentials from config
+
 
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
