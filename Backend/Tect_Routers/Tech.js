@@ -3,7 +3,6 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const { PPTS, WebS, CodingS, QuizS } = require('../Tech_models/Tech');
 
-
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -27,12 +26,22 @@ const sendMail = (recipient, subject, message) => {
 
 // Function to check if a user exists in any event collection
 async function isUserAlreadyRegistered(email) {
-  return (
-    (await PPTS.findOne({ Email: email })) ||
-    (await WebS.findOne({ Email: email })) ||
-    (await CodingS.findOne({ Email: email })) ||
-    (await QuizS.findOne({ Email: email }))
-  );
+  const registrations = await Promise.all([
+    PPTS.find({ Email: email }),
+    WebS.find({ Email: email }),
+    CodingS.find({ Email: email }),
+    QuizS.find({ Email: email })
+  ]);
+
+  const totalRegistrations = registrations.flat().length;
+
+  return totalRegistrations >= 2;
+}
+
+// Function to check if a user is already registered for the same event
+async function isUserRegisteredForSameEvent(email, Model) {
+  const existingRegistration = await Model.findOne({ Email: email });
+  return !!existingRegistration;
 }
 
 // Function to handle registration with duplicate check
@@ -40,9 +49,14 @@ async function createDocument(req, res, Model, subject, message) {
   try {
     const { Name, Email, Phone_No, College, With_Accomadation, Without_Accomadation } = req.body;
 
-    // Check if user already registered
+    // Check if user already registered for two events
     if (await isUserAlreadyRegistered(Email)) {
-      return res.status(400).json({ message: "You have already registered for an event." });
+      return res.status(400).json({ message: "You can only register for up to two technical events." });
+    }
+
+    // Check if user already registered for the same event
+    if (await isUserRegisteredForSameEvent(Email, Model)) {
+      return res.status(400).json({ message: "You are already registered for this event." });
     }
 
     // Save registration
