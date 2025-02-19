@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "davidshalomswe@gmail.com",
-    pass: "qvmcuzfpdwyxrbuu", // ⚠ Hardcoded App Password (Not Secure for Production)
+    pass: "qvmcuzfpdwyxrbuu", 
   },
 });
 
@@ -32,15 +32,31 @@ const sendMail = async (recipient, subject, message) => {
   }
 };
 
+// Function to check if user is already registered for two events or the same event
+const isUserAlreadyRegistered = async (email, Model) => {
+  const registrations = await Promise.all(
+    nonTechSchemas.map((schema) => schema.find({ Email: email }))
+  );
+  const totalRegistrations = registrations.flat().length;
+  const isAlreadyRegisteredForSameEvent = await Model.findOne({ Email: email });
+
+  return { totalRegistrations, isAlreadyRegisteredForSameEvent };
+};
+
 // Function to handle registration
 const registerForEvent = async (Model, req, res, subject, message) => {
   try {
     const { Email, Accommodation } = req.body;
 
     // Check if user is already registered in any non-tech event
-    const existingUser = await Promise.all(nonTechSchemas.map((schema) => schema.findOne({ Email })));
-    if (existingUser.some((user) => user)) {
-      return res.status(400).json({ message: "You have already registered for a non-technical event." });
+    const { totalRegistrations, isAlreadyRegisteredForSameEvent } = await isUserAlreadyRegistered(Email, Model);
+
+    if (totalRegistrations >= 2) {
+      return res.status(400).json({ message: "You can only register for up to two non-technical events." });
+    }
+
+    if (isAlreadyRegisteredForSameEvent) {
+      return res.status(400).json({ message: "You are already registered for this event." });
     }
 
     // Register user for the selected event
